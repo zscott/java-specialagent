@@ -30,6 +30,7 @@ import io.opentracing.Tracer.SpanBuilder;
 import io.opentracing.contrib.specialagent.LocalSpanContext;
 import io.opentracing.contrib.specialagent.OpenTracingApiUtil;
 import io.opentracing.propagation.Format;
+import io.opentracing.propagation.TextMapAdapter;
 import io.opentracing.tag.Tags;
 import io.opentracing.util.GlobalTracer;
 
@@ -111,7 +112,7 @@ public class AkkaAgentIntercept {
       .start();
 
     final HashMap<String,String> headers = new HashMap<>();
-    tracer.inject(span.context(), Format.Builtin.TEXT_MAP_INJECT, headers::put);
+    tracer.inject(span.context(), Format.Builtin.TEXT_MAP, new TextMapAdapter(headers));
 
     final Scope scope = tracer.activateSpan(span);
     LocalSpanContext.set(COMPONENT_NAME, span, scope);

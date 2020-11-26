@@ -20,6 +20,7 @@ import java.util.Map;
 import io.opentracing.SpanContext;
 import io.opentracing.Tracer;
 import io.opentracing.propagation.Format;
+import io.opentracing.propagation.TextMapAdapter;
 
 public class TracedMessage<T> {
   private final T message;
@@ -35,6 +36,6 @@ public class TracedMessage<T> {
   }
 
   public SpanContext spanContext(final Tracer tracer) {
-    return tracer.extract(Format.Builtin.TEXT_MAP_EXTRACT, headers.entrySet()::iterator);
+    return tracer.extract(Format.Builtin.TEXT_MAP, new TextMapAdapter(headers));
   }
 }
